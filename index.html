@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git Basics: A Beginner's Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gitOrange: '#F1502F',
+                        gitDark: '#1e2327'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&family=Source+Sans+Pro:wght@400;600;700&display=swap');
+        
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+        
+        code, pre {
+            font-family: 'Source Code Pro', monospace;
+        }
+        
+        .git-icon {
+            color: #F1502F;
+        }
+        
+        .section-icon {
+            background-color: #F1502F;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+        
+        .command-box {
+            background-color: #1e2327;
+            border-left: 4px solid #F1502F;
+            color: white;
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            overflow-x: auto;
+        }
+        
+        .output-box {
+            background-color: #e9ecef;
+            border-left: 4px solid #6c757d;
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            overflow-x: auto;
+        }
+        
+        .nav-item {
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item:hover {
+            background-color: rgba(241, 80, 47, 0.1);
+        }
+        
+        .info-box {
+            background-color: #e6f7ff;
+            border-left: 4px solid #1890ff;
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning-box {
+            background-color: #fffbe6;
+            border-left: 4px solid #faad14;
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .terminal {
+            background-color: #1e2327;
+            color: #fff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            font-family: 'Source Code Pro', monospace;
+            overflow-x: auto;
+        }
+        
+        .terminal .command {
+            color: #6cb6ff;
+        }
+        
+        .terminal .output {
+            color: #ffffff;
+        }
+        
+        .terminal .comment {
+            color: #8c8c8c;
+            font-style: italic;
+        }
+        
+        .step-number {
+            background-color: #F1502F;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 12px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<header class="bg-gradient-to-r from-gitDark to-gitOrange text-white p-6 shadow-md">
+  <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+    <div class="flex items-center mb-4 md:mb-0">
+      <i class="fab fa-git fa-3x mr-4"></i>
+      <div>
+        <h1 class="text-3xl font-bold">Git Basics</h1>
+        <p class="text-gray-200">A Beginner's Guide to Version Control</p>
+      </div>
+    </div>
+
+    <!-- Responsive Navigation (always visible) -->
+    <nav class="flex flex-wrap md:flex-nowrap gap-2 overflow-x-auto md:overflow-visible w-full md:w-auto justify-center md:justify-end">
+      <a href="#intro" class="nav-item px-4 py-2 rounded-lg">Introduction</a>
+      <a href="#install" class="nav-item px-4 py-2 rounded-lg">Installation</a>
+      <a href="#workflow" class="nav-item px-4 py-2 rounded-lg">Workflow</a>
+      <a href="#advanced" class="nav-item px-4 py-2 rounded-lg">Advanced</a>
+      <a href="#delete-rename" class="nav-item px-4 py-2 rounded-lg">Delete/Rename</a>
+      <a href="#undo" class="nav-item px-4 py-2 rounded-lg">Undo</a>
+      <a href="#branches" class="nav-item px-4 py-2 rounded-lg">Branches</a>
+      <a href="#branch-merge" class="nav-item px-4 py-2 rounded-lg">Branch Merge</a>
+      <a href="#additional" class="nav-item px-4 py-2 rounded-lg">Additional Git Info</a>
+    </nav>
+  </div>
+</header>
+
+
+
+
+    <div class="container mx-auto px-4 py-8 max-w-5xl">
+        <!-- Introduction Section -->
+        <section id="intro" class="mb-12 scroll-mt-16">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <span class="section-icon mr-3 text-white"><i class="fas fa-question"></i></span>
+                What is Git?
+            </h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <p class="mb-4">
+                    Git is a <span class="font-semibold text-gitOrange">distributed version control system</span> that helps developers track changes in their code during software development. It was created by Linus Torvalds in 2005 for Linux kernel development.
+                </p>
+                
+                <p class="mb-4">
+                    Think of Git as a time machine for your code - it allows you to go back to previous versions, see who made changes, and collaborate with others without overwriting each other's work.
+                </p>
+                
+                <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500 mb-4">
+                    <h3 class="font-bold text-blue-800 mb-2">Why we say Git is a version controller</h3>
+                    <p>
+                        Git manages and tracks the history of changes to files. Whenever you save a new version of your project, Git takes a snapshot of what all your files look like at that moment and stores a reference to that snapshot.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h3 class="font-bold text-gitOrange mb-2">Importance of Git</h3>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Enables collaboration among developers</li>
+                            <li>Tracks changes and history of projects</li>
+                            <li>Allows reverting to previous versions</li>
+                            <li>Facilitates branching and experimentation</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h3 class="font-bold text-gitOrange mb-2">Key Features of Git</h3>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Distributed development</li>
+                            <li>Branching and merging</li>
+                            <li>Staging area</li>
+                            <li>Fast and efficient performance</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Installation Section -->
+        <section id="install" class="mb-12 scroll-mt-16">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <span class="section-icon mr-3 text-white"><i class="fas fa-download"></i></span>
+                Installing and Setting Up Git
+            </h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h3 class="text-xl font-semibold mb-4 text-gitOrange">Installation on Different Operating Systems</h3>
+                
+                <div class="mb-6">
+                    <h4 class="font-bold mb-2">Linux (Debian/Ubuntu)</h4>
+                    <div class="command-box">
+                        <code>sudo apt-get update && sudo apt-get install git</code>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 class="font-bold mb-2">Windows</h4>
+                    <p class="mb-2">Download and install from the official website:</p>
+                    <div class="command-box">
+                        <code>https://git-scm.com/download/win</code>
+                    </div>
+                </div>
+                
+                <h3 class="text-xl font-semibold my-4 text-gitOrange">Verifying Installation</h3>
+                <p class="mb-2">Check installed Git version:</p>
+                <div class="command-box mb-2">
+                    <code>git --version</code>
+                </div>
+                <div class="output-box mb-6">
+                    <code>git version 2.34.1</code>
+                </div>
+                
+                <h3 class="text-xl font-semibold my-4 text-gitOrange">Configuring User Information</h3>
+                <p class="mb-2">Set your global username and email:</p>
+                <div class="command-box mb-2">
+                    <code>git config --global user.name "Your Name"</code>
+                </div>
+                <div class="command-box mb-2">
+                    <code>git config --global user.email "your.email@example.com"</code>
+                </div>
+                
+                <p class="mb-2">Check your configuration:</p>
+                <div class="command-box mb-2">
+                    <code>git config --list</code>
+                </div>
+                <div class="output-box mb-6">
+                    <code>user.name=Your Name<br>user.email=your.email@example.com<br>color.ui=auto</code>
+                </div>
+                
+                <h3 class="text-xl font-semibold my-4 text-gitOrange">Creating a Global Repository</h3>
+                <p class="mb-2">Initialize a new Git repository:</p>
+                <div class="command-box mb-2">
+                    <code>mkdir my-project<br>cd my-project<br>git init</code>
+                </div>
+                <div class="output-box mb-4">
+                    <code>Initialized empty Git repository in /path/to/my-project/.git/</code>
+                </div>
+                
+                <p class="mb-2">Open with Visual Studio Code:</p>
+                <div class="command-box">
+                    <code>code .</code>
+                </div>
+            </div>
+        </section>
+
+        <!-- Git Status and Workflow -->
+        <section id="workflow" class="mb-12 scroll-mt-16">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <span class="section-icon mr-3 text-white"><i class="fas fa-project-diagram"></i></span>
+                Git Status and Basic Workflow
+            </h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h3 class="text-xl font-semibold mb-4 text-gitOrange">Checking Git Status</h3>
+                <p class="mb-2">The <code>git status</code> command shows the state of your working directory and staging area:</p>
+                <div class="command-box mb-2">
+                    <code>git status</code>
+                </div>
+                <div class="output-box mb-6">
+                    <code>On branch main<br>No commits yet<br>Untracked files:<br>&nbsp; (use "git add &lt;file&gt;..." to include in what will be committed)<br>&nbsp; &nbsp; &nbsp; index.html<br>&nbsp; &nbsp; &nbsp; styles.css<br><br>nothing added to commit but untracked files present (use "git add" to track)</code>
+                </div>
+                
+                <h3 class="text-xl font-semibold mb-4 text-gitOrange">The Three Main Areas in Git</h3>
+                
+                <div class="mb-6">
+                    <h4 class="font-bold text-lg mb-2">1. Working Directory</h4>
+                    <p>This is where you modify your files. It represents the current state of your project on your local machine. Files in the working directory can be in one of two states: tracked or untracked.</p>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 class="font-bold text-lg mb-2">2. Staging Area (Index)</h4>
+                    <p>The staging area is where you prepare changes for the next commit. When you use <code>git add</code>, you're moving changes from the working directory to the staging area. This allows you to carefully curate which changes will be part of the next snapshot.</p>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 class="font-bold text-lg mb-2">3. Repository (.git directory)</h4>
+                    <p>This is where Git permanently stores the changes as commits. Once you commit changes, they are safely stored in the repository's database. The repository contains all of the commits, branches, tags, and other history of your project.</p>
+                </div>
+                
+                <div class="flex justify-center my-8">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsG-nQLG96LQGx5DNBXI16ZDniJakqvqdYOA&s" alt="Git workflow diagram" class="rounded-lg shadow-md max-w-full h-auto">
+                </div>
+                
+                <h3 class="text-xl font-semibold my-4 text-gitOrange">Basic Git Commands</h3>
+                
+                <div class="mb-6">
+                    <h4 class="font-bold text-lg mb-2">Adding Files to Staging Area</h4>
+                    <div class="command-box mb-2">
+                        <code>git add filename.txt</code> <span class="text-gray-400"># Add specific file</span><br>
+                        <code>git add .</code> <span class="text-gray-400"># Add all changes in current directory</span>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 class="font-bold text-lg mb-2">Committing Changes</h4>
+                    <p class="mb-2">Create a snapshot of the changes in your staging area:</p>
+                    <div class="command-box mb-2">
+                        <code>git commit -m "Add descriptive commit message here"</code>
+                    </div>
+                    <div class="output-box">
+                        <code>[main (root-commit) a1b2c3d] Add descriptive commit message here<br> 2 files changed, 50 insertions(+)<br> create mode 100644 index.html<br> create mode 100644 styles.css</code>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 class="font-bold text-lg mb-2">Viewing History</h4>
+                    <p class="mb-2">Show the commit history:</p>
+                    <div class="command-box mb-2">
+                        <code>git log</code>
+                    </div>
+                    <div class="output-box">
+                        <code>commit a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0 (HEAD -> main)<br>Author: Your Name &lt;your.email@example.com&gt;<br>Date: &nbsp; &nbsp;Mon Aug 1 12:00:00 2023 +0530<br><br>&nbsp; &nbsp; &nbsp;Add descriptive commit message here<br><br>commit b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1<br>Author: Your Name &lt;your.email@example.com&gt;<br>Date: &nbsp; &nbsp;Mon Aug 1 11:30:00 2023 +0530<br><br>&nbsp; &nbsp; &nbsp;Initial commit</code>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 class="font-bold text-lg mb-2">Viewing Compact Logs</h4>
+                    <div class="command-box mb-2">
+                        <code>git log --oneline --graph --all</code>
+                    </div>
+                    <div class="output-box">
+                        <code>* a1b2c3d (HEAD -> main) Add descriptive commit message here<br>* b2c3d4e Initial commit</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advanced Git Operations -->
+        <section id="advanced" class="mb-12 scroll-mt-16">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <span class="section-icon mr-3 text-white"><i class="fas fa-cogs"></i></span>
+                Advanced Git Operations
+            </h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h3 class="text-xl font-semibold mb-4 text-gitOrange">Git Short Log</h3>
+                <p class="mb-4">The <code>git shortlog</code> command summarizes git log output in a more digestible format, grouping commits by author:</p>
+                
+                <div class="command-box mb-2">
+                    <code>git shortlog</code>
+                </div>
+                <div class="output-box mb-6">
+                    <code>Y.Perera (3):<br>&nbsp;&nbsp;&nbsp;&nbsp;Initial commit<br>&nbsp;&nbsp;&nbsp;&nbsp;Add index.html<br>&nbsp;&nbsp;&nbsp;&nbsp;Update styles.css<br><br>J.Smitha (2):<br>&nbsp;&nbsp;&nbsp;&nbsp;Fix header alignment<br>&nbsp;&nbsp;&nbsp;&nbsp;Add contact form</code>
+                </div>
+                
+                <h3 class="text-xl font-semibold mb-4 text-gitOrange">Understanding Git Diff</h3>
+                <p class="mb-4">The <code>git diff</code> command shows changes between commits, commit and working tree, etc. Let's explore a practical scenario:</p>
+                
+                <div class="info-box mb-4">
+                    <p><strong>Scenario:</strong> We've created about.html, index.html, and added a new file newpage.html. Then we edited about.html, created newpage.html and edited index.html (duplicated one paragraph). We only added index.html to staging with <code>git add index.html</code>.</p>
+                </div>
+                
+                <div class="command-box mb-2">
+                    <code>git status</code>
+                </div>
+                <div class="output-box mb-4">
+                    <code>On branch main<br>Changes to be committed:<br>&nbsp; (use "git restore --staged &lt;file&gt;..." to unstage)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modified:   index.html<br><br>Changes not staged for commit:<br>&nbsp; (use "git add &lt;file&gt;..." to update what will be committed)<br>&nbsp; (use "git restore &lt;file&gt;..." to discard changes in working directory)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modified:   about.html<br><br>Untracked files:<br>&nbsp; (use "git add &lt;file&gt;..." to include in what will be committed)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newpage.html</code>
+                </div>
+                
+                <p class="mb-4">Now let's see what <code>git diff</code> shows us:</p>
+                
+                <div class="command-box mb-2">
+                    <code>git diff</code>
+                </div>
+                <div class="output-box mb-6">
+                    <code>diff --git a/about.html b/about.html<br>index 7a3b8c0..d6f5a2e 100644<br>--- a/about.html<br>+++ b/about.html<br>@@ -5,6 +5,7 @@<br>     <title>About Us</title><br>   </head><br>   <body><br>+    <h1>New Section Added</h1><br>     <p>We are a great company.</p><br>   </body><br> </html></code>
+                </div>
+                
+                <p class="mb-4">To see what's in the staging area (already added with git add):</p>
+                
+                <div class="command-box mb-2">
+                    <code>git diff --staged</code>
+                </div>
+                <div class="output-box mb-6">
+                    <code>diff --git a/index.html b/index.html<br>index 9c6b057..a1b2c3d 100644<br>--- a/index.html<br>+++ b/index.html<br>@@ -10,6 +10,8 @@<br>     <h1>Welcome to Our Website</h1><br>     <p>This is a paragraph of text on our homepage.</p><br>     <p>This is a paragraph of text on our homepage.</p><br>+    <p>This is a paragraph of text on our homepage.</p><br>+    <p>This is a paragraph of text on our homepage.</p><br>   </body><br> </html></code>
+                </div>
+                
+                <h3 class="text-xl font-semibold mb-4 text-gitOrange">Committing Specific Changes</h3>
+                <p class="mb-4">Now let's commit our staged changes (only index.html):</p>
+                
+                <div class="command-box mb-2">
+                    <code>git commit -m "Duplicated paragraph in index.html"</code>
+                </div>
+                <div class="output-box mb-6">
+                    <code>[main 4d5e6f7] Duplicated paragraph in index.html<br> 1 file changed, 2 insertions(+)</code>
+                </div>
+                
+                <h3 class="text-xl font-semibold mb-4 text-gitOrange">Checking Out Specific Commits</h3>
+                <p class="mb-4">You can check out a specific commit using its hash (first 7 characters are usually enough):</p>
+                
+                <div class="command-box mb-2">
+                    <code>git checkout a1b2c3d</code>
+                </div>
+                <div class="output-box mb-4">
+                    <code>Note: switching to 'a1b2c3d'.<br><br>You are in 'detached HEAD' state. You can look around, make experimental<br>changes and commit them, and you can discard any commits you make in this<br>state without impacting any branches by switching back to a branch.<br><br>If you want to create a new branch to retain commits you create, you may<br>do so (now or later) by using -c with the switch command. Example:<br><br>  git switch -c &lt;new-branch-name&gt;<br><br>Or undo this operation with:<br><br>  git switch -<br><br>Turn off this advice by setting config variable advice.detachedHead to false<br><br>HEAD is now at a1b2c3d Add descriptive commit message here</code>
+                </div>
+                
+                <div class="warning-box mb-4">
+                    <p><strong>Note:</strong> In this detached HEAD state, you'll only see the files as they were at that specific commit. Other files may appear to be deleted, but they're still in your repository's history.</p>
+                </div>
+                
+                <h3 class="text-xl font-semibold mb-4 text-gitOrange">Returning to the Latest Commit</h3>
+                <p class="mb-4">To return to the latest commit in your branch:</p>
+                
+                <div class="command-box mb-2">
+                    <code>git switch -</code>
+                </div>
+                <div class="output-box mb-6">
+                    <code>Switched to branch 'main'</code>
+                </div>
+            </div>
+        </section>
+
+        <!-- Delete and Rename Operations -->
+        <section id="delete-rename" class="mb-12 scroll-mt-16">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <span class="section-icon mr-3 text-white"><i class="fas fa-exchange-alt"></i></span>
+                Delete and Rename Operations in Git
+            </h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h3 class="text-xl font-semibold mb-4 text-gitOrange">Removing Files in Git</h3>
+                <p class="mb-4">There are two ways to remove files in Git, each with different implications:</p>
+                
+                <h4 class="font-bold text-lg mb-2 mt-6">1. Using <code>rm</code> (Standard Unix Command)</h4>
+                <p class="mb-2">This removes the file from your working directory but doesn't stage the deletion in Git:</p>
+                
+                <div class="terminal mb-4">
+                    <div class="command">$ rm file.txt</div>
+                    <div class="comment"># File is removed from working directory</div>
+                    <div class="command">$ git status</div>
+                    <div class="output">On branch main<br>Changes not staged for commit:<br>&nbsp; (use "git add/rm &lt;file&gt;..." to update what will be committed)<br>&nbsp; (use "git restore &lt;file&gt;..." to discard changes in working directory)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deleted: &nbsp;&nbsp;file.txt</div>
+                </div>
+                
+                <p class="mb-4">After using <code>rm</code>, you need to explicitly stage the deletion with <code>git add</code> or <code>git rm</code>.</p>
+                
+                <h4 class="font-bold text-lg mb-2 mt-6">2. Using <code>git rm</code> (Git Command)</h4>
+                <p class="mb-2">This removes the file from your working directory <strong>and</strong> stages the deletion in one step:</p>
+                
+                <div class="terminal mb-4">
+                    <div class="command">$ git rm file.txt</div>
+                    <div class="output">rm 'file.txt'</div>
+                    <div class="command">$ git status</div>
+                    <div class="output">On branch main<br>Changes to be committed:<br>&nbsp; (use "git restore --staged &lt;file&gt;..." to unstage)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deleted: &nbsp;&nbsp;file.txt</div>
+                </div>
+                
+                <div class="info-box mb-6">
+                    <p><strong>Key Difference:</strong> <code>rm</code> only removes the file from your working directory, while <code>git rm</code> removes the file and stages the deletion in one command.</p>
+                </div>
+                
+                <h3 class="text-xl font-semibold mb-4 text-gitOrange">Renaming Files in Git</h3>
+                <p class="mb-4">Similarly, there are two approaches to renaming files:</p>
+                
+                <h4 class="font-bold text-lg mb-2 mt-6">1. Using <code>mv</code> (Standard Unix Command)</h4>
+                <p class="mb-2">This renames the file in your working directory but doesn't stage the rename in Git:</p>
+                
+                <div class="terminal mb-4">
+                    <div class="command">$ mv oldname.txt newname.txt</div>
+                    <div class="comment"># File is renamed in working directory</div>
+                    <div class="command">$ git status</div>
+                    <div class="output">On branch main<br>Changes not staged for commit:<br>&nbsp; (use "git add/rm &lt;file&gt;..." to update what will be committed)<br>&nbsp; (use "git restore &lt;file&gt;..." to discard changes in working directory)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deleted: &nbsp;&nbsp;oldname.txt<br><br>Untracked files:<br>&nbsp; (use "git add &lt;file&gt;..." to include in what will be committed)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newname.txt</div>
+                </div>
+                
+                <p class="mb-4">Git sees this as deleting the old file and creating a new one. You need to stage both changes manually.</p>
+                
+                <h4 class="font-bold text-lg mb-2 mt-6">2. Using <code>git mv</code> (Git Command)</h4>
+                <p class="mb-2">This renames the file and stages the rename in one step, preserving file history:</p>
+                
+                <div class="terminal mb-4">
+                    <div class="command">$ git mv oldname.txt newname.txt</div>
+                    <div class="comment"># File is renamed and change is staged</div>
+                    <div class="command">$ git status</div>
+                    <div class="output">On branch main<br>Changes to be committed:<br>&nbsp; (use "git restore --staged &lt;file&gt;..." to unstage)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;renamed: &nbsp;&nbsp;oldname.txt -> newname.txt</div>
+                </div>
+                
+                <div class="info-box mb-6">
+                    <p><strong>Key Difference:</strong> <code>mv</code> only renames the file in your working directory, while <code>git mv</code> renames the file and stages the change, allowing Git to track the file's history across the rename.</p>
+                </div>
+                
+                <h3 class="text-xl font-semibold mb-4 text-gitOrange">Committing the Changes</h3>
+                <p class="mb-2">After using either method, you need to commit the changes:</p>
+                
+                <div class="terminal mb-4">
+                    <div class="command">$ git commit -m "Remove file.txt and rename oldname.txt to newname.txt"</div>
+                    <div class="output">[main 1a2b3c4] Remove file.txt and rename oldname.txt to newname.txt<br> 2 files changed, 0 insertions(+), 0 deletions(-)<br> delete mode 100644 file.txt<br> rename oldname.txt => newname.txt (100%)</div>
+                </div>
+                
+                <div class="warning-box">
+                    <p><strong>Note:</strong> Git doesn't actually store rename operations. Instead, it detects renames by comparing file contents between commits. Using <code>git mv</code> is essentially a convenience command that performs <code>mv</code> followed by <code>git add</code> for both the old and new filenames.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Undo Operations -->
+        <section id="undo" class="mb-12 scroll-mt-16">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <span class="section-icon mr-3 text-white"><i class="fas fa-undo"></i></span>
+                Undo Operations in Git
+            </h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <p class="mb-4">Git provides several ways to undo changes at different stages of the workflow. Here are the main undo operations:</p>
+                
+                <div class="flex items-start mb-6">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-2">Discard changes in working directory</h4>
+                        <p class="mb-2">Revert a file back to how it was in the last commit:</p>
+                        <div class="terminal mb-2">
+                            <div class="command">$ git restore filename.txt</div>
+                            <div class="comment"># Changes in working directory are discarded</div>
+                        </div>
+                        <p class="text-sm text-gray-600">This command will undo any changes you've made to the file since the last commit, restoring it to the state in the HEAD commit.</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start mb-6">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-2">Unstage changes</h4>
+                        <p class="mb-2">Remove a file from the staging area but keep changes in working directory:</p>
+                        <div class="terminal mb-2">
+                            <div class="command">$ git restore --staged filename.txt</div>
+                            <div class="comment"># File is unstaged but changes are kept</div>
+                            <div class="command">$ git status</div>
+                            <div class="output">On branch main<br>Changes not staged for commit:<br>&nbsp; (use "git add &lt;file&gt;..." to update what will be committed)<br>&nbsp; (use "git restore &lt;file&gt;..." to discard changes in working directory)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modified: &nbsp;&nbsp;filename.txt<br><br>no changes added to commit (use "git add" and/or "git commit -a")</div>
+                        </div>
+                        <p class="text-sm text-gray-600">This is useful when you've added a file to the staging area but realize you're not ready to commit it yet.</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start mb-6">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-2">Undo commit but keep changes staged</h4>
+                        <p class="mb-2">Move HEAD pointer to previous commit but keep changes in staging area:</p>
+                        <div class="terminal mb-2">
+                            <div class="command">$ git reset --soft HEAD~1</div>
+                            <div class="comment"># Last commit is undone, changes are staged</div>
+                            <div class="command">$ git status</div>
+                            <div class="output">On branch main<br>Changes to be committed:<br>&nbsp; (use "git restore --staged &lt;file&gt;..." to unstage)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modified: &nbsp;&nbsp;filename.txt</div>
+                        </div>
+                        <p class="text-sm text-gray-600">This command is useful when you want to redo a commit with a different message or add more changes to it.</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start mb-6">
+                    <div class="step-number">4</div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-2">Undo commit and unstage changes</h4>
+                        <p class="mb-2">Move HEAD pointer to previous commit and unstage changes:</p>
+                        <div class="terminal mb-2">
+                            <div class="command">$ git reset HEAD~1</div>
+                            <div class="comment"># Default is --mixed: undo commit and unstage changes</div>
+                            <div class="command">$ git status</div>
+                            <div class="output">On branch main<br>Changes not staged for commit:<br>&nbsp; (use "git add &lt;file&gt;..." to update what will be committed)<br>&nbsp; (use "git restore &lt;file&gt;..." to discard changes in working directory)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modified: &nbsp;&nbsp;filename.txt<br><br>no changes added to commit (use "git add" and/or "git commit -a")</div>
+                        </div>
+                        <p class="text-sm text-gray-600">This is the default reset mode. It undoes the commit and keeps the changes in your working directory but not staged.</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start mb-6">
+                    <div class="step-number">5</div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-2">Completely remove commit and discard changes</h4>
+                        <p class="mb-2">Completely remove the last commit and all its changes:</p>
+                        <div class="terminal mb-2">
+                            <div class="command">$ git reset --hard HEAD~1</div>
+                            <div class="comment"># Last commit and all changes are completely removed</div>
+                            <div class="command">$ git status</div>
+                            <div class="output">On branch main<br>nothing to commit, working tree clean</div>
+                        </div>
+                        <div class="warning-box mt-2">
+                            <p><strong>Warning:</strong> This command will permanently delete your changes. Use with caution!</p>
+                        </div>
+                        <p class="text-sm text-gray-600">This command should be used carefully as it permanently discards all changes from the undone commit.</p>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <p><strong>Note:</strong> The <code>HEAD~1</code> syntax refers to the commit before the current HEAD (last commit). You can change the number to go back multiple commits (e.g., <code>HEAD~3</code> to go back 3 commits).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Branches -->
+        <section id="branches" class="mb-12 scroll-mt-16">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <span class="section-icon mr-3 text-white"><i class="fas fa-code-branch"></i></span>
+                Working with Branches in Git
+            </h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h3 class="text-xl font-semibold mb-4 text-gitOrange">What are Branches?</h3>
+                <p class="mb-4">Branches in Git are pointers to specific commits. They allow you to work on different versions of your code simultaneously without affecting the main codebase.</p>
+                
+                <div class="flex justify-center my-8">
+                    <img src="https://www.nobledesktop.com/image/gitresources/git-branches-merge.png" alt="Git branches diagram" class="rounded-lg shadow-md max-w-full h-auto">
+                </div>
+                
+                <h3 class="text-xl font-semibold mb-4 text-gitOrange">Why Use Branches?</h3>
+                <p class="mb-4">Branches are essential for:</p>
+                
+                <ul class="list-disc pl-5 space-y-2 mb-6">
+                    <li><strong>Parallel development:</strong> Work on multiple features simultaneously</li>
+                    <li><strong>Isolation:</strong> Experiment with new ideas without breaking the main code</li>
+                    <li><strong>Collaboration:</strong> Multiple developers can work on different features</li>
+                    <li><strong>Release management:</strong> Maintain different versions of your software</li>
+                    <li><strong>Bug fixing:</strong> Fix issues without disrupting ongoing development</li>
+                </ul>
+                
+                <h3 class="text-xl font-semibold mb-4 text-gitOrange">Basic Branch Commands</h3>
+                
+                <h4 class="font-bold text-lg mb-2 mt-6">Create a new branch</h4>
+                <p class="mb-2">Create a new branch pointing to the current commit:</p>
+                <div class="terminal mb-4">
+                    <div class="command">$ git branch feature-login</div>
+                    <div class="comment"># Creates a new branch called 'feature-login'</div>
+                </div>
+                
+                <h4 class="font-bold text-lg mb-2 mt-6">Switch to a branch</h4>
+                <p class="mb-2">Move to an existing branch:</p>
+                <div class="terminal mb-4">
+                    <div class="command">$ git switch feature-login</div>
+                    <div class="output">Switched to branch 'feature-login'</div>
+                </div>
+                
+                <h4 class="font-bold text-lg mb-2 mt-6">Create and switch in one command</h4>
+                <p class="mb-2">Create a new branch and immediately switch to it:</p>
+                <div class="terminal mb-4">
+                    <div class="command">$ git switch -c feature-signup</div>
+                    <div class="output">Switched to a new branch 'feature-signup'</div>
+                </div>
+                <p class="text-sm text-gray-600 mb-4">The <code>-c</code> flag stands for "create". This is a convenient shortcut for creating and switching to a new branch.</p>
+                
+                <h4 class="font-bold text-lg mb-2 mt-6">List all branches</h4>
+                <p class="mb-2">Show all branches in your repository:</p>
+                <div class="terminal mb-4">
+                    <div class="command">$ git branch</div>
+                    <div class="output">  feature-login<br>  main<br>* feature-signup</div>
+                    <div class="comment"># The asterisk (*) indicates the current branch</div>
+                </div>
+                
+                <h4 class="font-bold text-lg mb-2 mt-6">Merge a branch</h4>
+                <p class="mb-2">Combine changes from one branch into another:</p>
+                <div class="terminal mb-4">
+                    <div class="command">$ git switch main</div>
+                    <div class="output">Switched to branch 'main'</div>
+                    <div class="command">$ git merge feature-login</div>
+                    <div class="output">Updating a1b2c3d..4d5e6f7<br>Fast-forward<br> login.html | 15 +++++++++++++++<br> 1 file changed, 15 insertions(+)<br> create mode 100644 login.html</div>
+                </div>
+                
+                <h4 class="font-bold text-lg mb-2 mt-6">Delete a branch</h4>
+                <p class="mb-2">Remove a branch that is no longer needed:</p>
+                <div class="terminal mb-4">
+                    <div class="command">$ git branch -d feature-login</div>
+                    <div class="output">Deleted branch feature-login (was 4d5e6f7).</div>
+                </div>
+                
+                <div class="info-box">
+                    <p><strong>Branching Strategy:</strong> A common approach is to keep the <code>main</code> branch stable and create feature branches for new developments. Once a feature is complete and tested, it can be merged back into the main branch.</p>
+                </div>
+            </div>
+        </section>
+
+                <!-- Branch Merge -->
+        <section id="branch-merge" class="mb-12 scroll-mt-16">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <span class="section-icon mr-3 text-white"><i class="fas fa-code-merge"></i></span>
+                Branch Merging in Git
+            </h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h3 class="text-xl font-semibold mb-4 text-gitOrange">What is Branch Merging?</h3>
+                <p class="mb-4">Merging is the process of combining changes from one branch into another. This allows you to integrate work done in feature branches back into your main development branch.</p>
+                
+                <div class="flex justify-center my-8">
+                    <img src="https://www.nobledesktop.com/image/gitresources/git-branches-merge.png" alt="Git branches merge diagram" class="rounded-lg shadow-md max-w-full h-auto">
+                </div>
+                
+                <h3 class="text-xl font-semibold mb-4 text-gitOrange">Basic Merge Command</h3>
+                <p class="mb-2">To merge a branch into your current branch:</p>
+                <div class="terminal mb-4">
+                    <div class="command">$ git switch main</div>
+                    <div class="output">Switched to branch 'main'</div>
+                    <div class="command">$ git merge feature-branch</div>
+                    <div class="output">Updating a1b2c3d..4d5e6f7<br>Fast-forward<br> index.html | 5 +++++<br> 1 file changed, 5 insertions(+)</div>
+                </div>
+                
+                <h3 class="text-xl font-semibold mb-4 text-gitOrange">Understanding Three-Way Merge</h3>
+                <p class="mb-4">Git uses a three-way merge algorithm when the branches have diverged (both have new commits since they split):</p>
+                
+                <ul class="list-disc pl-5 space-y-2 mb-6">
+                    <li><strong>Base:</strong> The common ancestor commit of both branches</li>
+                    <li><strong>Current Change (Ours):</strong> The state of your current branch</li>
+                    <li><strong>Incoming Change (Theirs):</strong> The state of the branch you're merging in</li>
+                </ul>
+                
+                <p class="mb-4">Git compares these three states to determine how to combine the changes. If changes don't conflict, Git automatically merges them.</p>
+                
+                <h3 class="text-xl font-semibold mb-4 text-gitOrange">Resolving Merge Conflicts</h3>
+                <p class="mb-4">When the same part of a file was modified differently in both branches, Git can't automatically merge and creates a conflict:</p>
+                
+                <div class="terminal mb-4">
+                    <div class="command">$ git merge feature-branch</div>
+                    <div class="output">Auto-merging index.html<br>CONFLICT (content): Merge conflict in index.html<br>Automatic merge failed; fix conflicts and then commit the result.</div>
+                </div>
+                
+                <p class="mb-4">The conflicted file will contain markers showing both versions:</p>
+                
+                <div class="command-box mb-4">
+                    <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD<br>Current branch changes<br>=======<br>Incoming branch changes<br>&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature-branch</code>
+                </div>
+                
+                <h3 class="text-xl font-semibold mb-4 text-gitOrange">Resolving Conflicts in VS Code</h3>
+                <p class="mb-4">VS Code provides a visual interface for resolving merge conflicts with these options:</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-blue-800 mb-2">Accept Current Change</h4>
+                        <p>Keep your version (from the current branch) and discard the incoming changes</p>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-green-800 mb-2">Accept Incoming Change</h4>
+                        <p>Use the incoming version (from the branch being merged) and discard your changes</p>
+                    </div>
+                    
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-purple-800 mb-2">Accept Both Changes</h4>
+                        <p>Keep both versions, one after the other (may require manual editing)</p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="bg-yellow-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-yellow-800 mb-2">Compare Changes</h4>
+                        <p>View a side-by-side comparison to help decide which changes to keep</p>
+                    </div>
+                    
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-bold text-gray-800 mb-2">Manual Resolution</h4>
+                        <p>Edit the file manually to create a custom combination of both changes</p>
+                    </div>
+                </div>
+                
+                <h3 class="text-xl font-semibold mb-4 text-gitOrange">Completing the Merge</h3>
+                <p class="mb-2">After resolving all conflicts, you need to complete the merge:</p>
+                
+                <div class="terminal mb-4">
+                    <div class="command">$ git add .</div>
+                    <div class="comment"># Add all resolved files to staging</div>
+                    <div class="command">$ git commit</div>
+                    <div class="output">[main 7a8b9c0] Merge branch 'feature-branch'</div>
+                </div>
+                
+                <div class="info-box">
+                    <p><strong>Tip:</strong> Git will open your default text editor with a pre-filled commit message for merge commits. You can keep this message or modify it as needed.</p>
+                </div>
+            </div>
+        </section>
+
+                <!-- Branch Collaboration Example -->
+        <section id="collab-example" class="mb-12 scroll-mt-16">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <span class="section-icon mr-3 text-white"><i class="fas fa-users"></i></span>
+                Team Collaboration with Git Branches
+            </h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h3 class="text-xl font-semibold mb-4 text-gitOrange">Real-World Example: Team Project</h3>
+                <p class="mb-4">Let's walk through a practical example of how a team uses Git branches to work on different features simultaneously.</p>
+                
+                <div class="flex justify-center my-8">
+                    <div class="bg-gray-100 p-6 rounded-lg w-full">
+                        <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+                            <div class="flex items-center mb-4 md:mb-0">
+                                <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                                <span class="font-semibold">Main Branch</span>
+                            </div>
+                            <div class="flex items-center mb-4 md:mb-0">
+                                <div class="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
+                                <span class="font-semibold">Member A (Login Fix)</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-orange-500 mr-2"></div>
+                                <span class="font-semibold">Member B (Shipping Fix)</span>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <!-- Step 1 -->
+                            <div class="flex">
+                                <div class="step-number">1</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold mb-2">Initial Project Setup</h4>
+                                    <div class="terminal mb-2">
+                                        <div class="command">$ mkdir ecommerce-project</div>
+                                        <div class="command">$ cd ecommerce-project</div>
+                                        <div class="command">$ git init</div>
+                                        <div class="output">Initialized empty Git repository</div>
+                                        <div class="command">$ touch index.html style.css script.js</div>
+                                        <div class="command">$ git add .</div>
+                                        <div class="command">$ git commit -m "Initial project setup"</div>
+                                        <div class="output">[main (root-commit) a1b2c3d] Initial project setup</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 2 -->
+                            <div class="flex">
+                                <div class="step-number">2</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold mb-2">Manager Assigns Tasks</h4>
+                                    <p class="mb-2">Manager identifies two issues:</p>
+                                    <ul class="list-disc pl-5 mb-2">
+                                        <li>Member A: Fix login page error</li>
+                                        <li>Member B: Fix shipping cart calculation error</li>
+                                    </ul>
+                                    <p>Both members create separate branches from main:</p>
+                                    <div class="terminal mb-2">
+                                        <div class="command">$ git branch fix-login</div>
+                                        <div class="command">$ git branch fix-shipping</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 3 -->
+                            <div class="flex">
+                                <div class="step-number">3</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold mb-2">Parallel Development</h4>
+                                    <p class="mb-2">Both members work simultaneously on their branches:</p>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
+                                        <div class="bg-blue-50 p-3 rounded">
+                                            <h5 class="font-semibold">Member A (fix-login)</h5>
+                                            <div class="terminal">
+                                                <div class="command">$ git switch fix-login</div>
+                                                <div class="comment"># Edits login functionality in script.js</div>
+                                                <div class="command">$ git commit -am "Fix login validation"</div>
+                                            </div>
+                                        </div>
+                                        <div class="bg-orange-50 p-3 rounded">
+                                            <h5 class="font-semibold">Member B (fix-shipping)</h5>
+                                            <div class="terminal">
+                                                <div class="command">$ git switch fix-shipping</div>
+                                                <div class="comment"># Edits shipping calculation in script.js</div>
+                                                <div class="command">$ git commit -am "Fix shipping calculation"</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 4 -->
+                            <div class="flex">
+                                <div class="step-number">4</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold mb-2">Member A Merges First</h4>
+                                    <p class="mb-2">Member A completes their fix and merges to main:</p>
+                                    <div class="terminal mb-2">
+                                        <div class="command">$ git switch main</div>
+                                        <div class="command">$ git merge fix-login</div>
+                                        <div class="output">Updating a1b2c3d..4d5e6f7<br>Fast-forward<br> script.js | 3 +++<br> 1 file changed, 3 insertions(+)</div>
+                                    </div>
+                                    <p class="text-sm text-gray-600">Manager reviews and approves the changes</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 5 -->
+                            <div class="flex">
+                                <div class="step-number">5</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold mb-2">Member B Updates Their Branch</h4>
+                                    <p class="mb-2">Member B pulls the latest changes from main before merging:</p>
+                                    <div class="terminal mb-2">
+                                        <div class="command">$ git switch fix-shipping</div>
+                                        <div class="command">$ git merge main</div>
+                                        <div class="output">Auto-merging script.js<br>CONFLICT (content): Merge conflict in script.js</div>
+                                    </div>
+                                    <p class="text-sm text-gray-600">Both members edited the same file (script.js)</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 6 -->
+                            <div class="flex">
+                                <div class="step-number">6</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold mb-2">Resolving Merge Conflict</h4>
+                                    <p class="mb-2">Member B resolves the conflict in script.js:</p>
+                                    <div class="command-box mb-2">
+                                        <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD<br>// Shipping calculation fix<br>function calculateShipping() {<br>  // Member B's changes<br>}<br>=======<br>// Login validation fix<br>function validateLogin() {<br>  // Member A's changes<br>}<br>&gt;&gt;&gt;&gt;&gt;&gt;&gt; main</code>
+                                    </div>
+                                    <p class="mb-2">After manual editing, the file contains both fixes:</p>
+                                    <div class="command-box mb-2">
+                                        <code>// Login validation fix<br>function validateLogin() {<br>  // Member A's changes<br>}<br><br>// Shipping calculation fix<br>function calculateShipping() {<br>  // Member B's changes<br>}</code>
+                                    </div>
+                                    <div class="terminal mb-2">
+                                        <div class="command">$ git add script.js</div>
+                                        <div class="command">$ git commit -m "Merge main and resolve conflicts"</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 7 -->
+                            <div class="flex">
+                                <div class="step-number">7</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold mb-2">Final Merge to Main</h4>
+                                    <p class="mb-2">Member B merges their fix to the main branch:</p>
+                                    <div class="terminal mb-2">
+                                        <div class="command">$ git switch main</div>
+                                        <div class="command">$ git merge fix-shipping</div>
+                                        <div class="output">Merge made by the 'ort' strategy.<br> script.js | 5 +++++<br> 1 file changed, 5 insertions(+)</div>
+                                    </div>
+                                    <p class="text-sm text-green-600 font-semibold">Both fixes are now in the main branch!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 class="text-xl font-semibold mb-4 text-gitOrange">Key Takeaways</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-green-800 mb-2">Benefits of Branching</h4>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Parallel development without conflicts</li>
+                            <li>Isolated environments for each feature/fix</li>
+                            <li>Ability to review changes before merging</li>
+                            <li>Main branch always remains stable</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-blue-800 mb-2">When Conflicts Happen</h4>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Multiple people edit the same file</li>
+                            <li>Git highlights conflicting sections</li>
+                            <li>Manual resolution required</li>
+                            <li>Communication with team members is key</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <p><strong>Best Practice:</strong> Always pull the latest changes from the main branch before starting new work or creating a pull request. This minimizes merge conflicts and ensures your work is based on the most recent code.</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Additional Information -->
+        
+        <section id = "additional" class="mb-12 scroll-mt-16">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <span class="section-icon mr-3 text-white"><i class="fas fa-plus-circle"></i></span>
+                Additional Git Information
+            </h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold mb-4 text-gitOrange">Common Errors and Solutions</h3>
+                    
+                    <div class="mb-4 p-4 bg-red-50 rounded-lg">
+                        <h4 class="font-bold mb-2">fatal: not a git repository (or any of the parent directories)</h4>
+                        <p class="mb-2">This error occurs when you're trying to run a Git command outside of a Git repository.</p>
+                        <p class="mb-2"><span class="font-bold">Solution:</span> Run <code>git init</code> to initialize a new repository or navigate to an existing Git repository.</p>
+                    </div>
+                    
+                    <div class="mb-4 p-4 bg-red-50 rounded-lg">
+                        <h4 class="font-bold mb-2">Please tell me who you are.</h4>
+                        <p class="mb-2">This happens when you haven't configured your user name and email.</p>
+                        <p class="mb-2"><span class="font-bold">Solution:</span> Set your global username and email with <code>git config --global user.name "Your Name"</code> and <code>git config --global user.email "your@email.com"</code>.</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-gitOrange">Useful Tips</h3>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>Commit often with descriptive messages</li>
+                        <li>Use <code>git status</code> frequently to check the state of your repository</li>
+                        <li>Create branches for new features or experiments</li>
+                        <li>Always pull the latest changes before starting work</li>
+                        <li>Use <code>.gitignore</code> to exclude files that shouldn't be tracked</li>
+                        <li>Use <code>git diff</code> to review changes before committing</li>
+                        <li>Use <code>git checkout -- &lt;file&gt;</code> to discard changes in working directory</li>
+                        <li>Prefer <code>git rm</code> and <code>git mv</code> over standard commands when working with Git</li>
+                        <li>Use <code>git switch -c &lt;branch&gt;</code> to create and switch to a branch in one step</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        
+
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gitDark text-white py-8 mt-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="mb-2">Git Basics: A Beginner's Guide to Version Control</p>
+            <p class="text-gray-400">Created by Charithya </p>
+        </div>
+    </footer>
+
+<!-- Scroll to Top Button -->
+<button id="scrollTopBtn" 
+    class="fixed z-50 bg-gitOrange text-white rounded-full shadow-lg hover:bg-orange-600 transition duration-300"
+    style="bottom: calc(20px + env(safe-area-inset-bottom)); right: calc(20px + env(safe-area-inset-right)); width: 44px; height: 44px;">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+<!-- Scroll to Top Button + Mobile Menu Script -->
+<script>
+  const scrollTopBtn = document.getElementById("scrollTopBtn");
+  const menuBtn = document.getElementById("menuBtn");
+  const navMenu = document.getElementById("navMenu");
+
+  // Show "scroll to top" button only when scrolled down
+  window.addEventListener("scroll", function () {
+    if (window.scrollY > 200) {
+      scrollTopBtn.style.display = "flex";
+      scrollTopBtn.style.alignItems = "center";
+      scrollTopBtn.style.justifyContent = "center";
+    } else {
+      scrollTopBtn.style.display = "none";
+    }
+  });
+
+  // Scroll to top when clicked
+  scrollTopBtn.addEventListener("click", function () {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  // Keep visible on resize
+  window.addEventListener("resize", function () {
+    if (window.scrollY > 200) {
+      scrollTopBtn.style.display = "flex";
+      scrollTopBtn.style.alignItems = "center";
+      scrollTopBtn.style.justifyContent = "center";
+    }
+  });
+
+  // Toggle mobile nav
+  menuBtn.addEventListener("click", function () {
+    navMenu.classList.toggle("hidden");
+  });
+</script>
+
+</body>
+</html>
